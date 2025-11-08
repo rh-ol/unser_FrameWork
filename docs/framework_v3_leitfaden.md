@@ -1,96 +1,90 @@
-# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.17)
+# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.21)
 
 ## Einführung
-Dies ist der technische #Bauplan für das V3.17-Framework. Es definiert alle 28 #Prinzipien und die #Architektur, die durch den `KI_BOOTSTRAP_PROMPT.md` (P0) initiiert wird. Dieses Dokument ist die "Single Source of Truth" für das Design des Ökosystems.
+Dies ist der technische #Bauplan für das V3.21-Framework. Es definiert alle 31 #Prinzipien und die #Architektur, die durch den `KI_BOOTSTRAP_PROMPT.md` (P0) initiiert wird.
 
 ---
 
 ## Phase 0: Der KI-Geführte Projekt-Lebenszyklus
 
-Diese Phase definiert den #DevOps-Zyklus, die #Entwickler-Erfahrung (DX) und den #Architektur-Workflow.
-
 ### Prinzip 0: Der "One Shot" Bootstrapper (V3.8+ Workflow)
-* **Problem:** Ein neuer Entwickler weiß nicht, wie er anfangen soll.
-* **Lösung:** Ein einziger, atomarer Start-Workflow, gesteuert durch den `KI_BOOTSTRAP_PROMPT.md`.
-* **Sub-Prinzip (P0.5):** Konversationelles Commit Kit für atomare Git-Updates.
+* Ein einziger, atomarer Start-Workflow (`KI_BOOTSTRAP_PROMPT.md`).
+* **P0.5:** Konversationelles Commit Kit.
 
-### Prinzip 16: Testdaten-Generierung & History-Hygiene (QA & Security)
-* **P16.1 (QA):** KI generiert Testdaten (`testdata_generator.sh`).
-* **P16.2 (Security):** Sensible Terminal-Befehle MÜSSEN durch `set +o history` gekapselt werden.
+### Prinzip 16: Testdaten & History-Hygiene (QA & Security)
+* **P16.1 (QA):** KI generiert Testdaten.
+* **P16.2 (Security):** `set +o history` Kapselung.
 
-### Prinzip 17: CI/CD Pipeline-Generierung (Deployment-Setup)
-* KI generiert `ci_cd_pipeline.yml` für automatisierte Tests/Deployments.
+### Prinzip 17: CI/CD Pipeline-Generierung
+* Automatisierte Tests und Deployments (`ci_cd_pipeline.yml`).
 
-### Prinzip 18: "IntelliSense"-Architektur (Selbst-Dokumentation)
-* Code muss durch strenge Typisierung und JSDoc seine eigene Dokumentation sein.
+### Prinzip 18: "IntelliSense"-Architektur
+* Selbst-dokumentierender Code (Type-Safety, JSDoc).
 
 ### Prinzip 19: Anforderungs-Management (#Reusability)
-* Jede Entwicklung beginnt mit einer Anforderung (`REQ-001`). Anforderungen werden in wiederverwendbaren Sets gruppiert.
+* Strukturierte Anforderungen (`REQ-001`), gruppiert in Sets.
 
-### Prinzip 22: Der #Generelle_Software_Development_Prozess (SDP / Git-Flow)
-* Wir nutzen einen KI-geführten **GitHub-Flow**:
-    1.  **#Branch:** Immer auf isolierten Branches arbeiten.
-    2.  **#Verify:** Lokal testen (P0 Abnahmetest).
-    3.  **#Review:** Pull Request (PR) und menschlicher Review des Diffs.
-    4.  **#Merge & #Tag:** Nur stabile Stände gelangen nach `main`.
+### Prinzip 22: Der #Generelle_Software_Development_Prozess (Git-Flow)
+* **#Branch** -> **#Verify** (lokal) -> **#Review** (PR) -> **#Merge & #Tag** (main).
 
 ### Prinzip 23: #CleanCode & #KISS
-* **KISS:** Einfachste, robuste Lösung bevorzugen.
-* **DRY:** Wiederholungen vermeiden (Core-Paket P21).
-* **Archivierung:** Veraltete Skripte nicht löschen, sondern nach `archive/` verschieben (Transparenz P4).
+* Einfachheit, DRY, und Archivierung statt Löschen.
 
 ### Prinzip 24: Zwingende Fehler-Integrität
-* Erkannte #Bugs haben sofortige Priorität. Der Prozess wird "eingefroren", bis der Bug behoben ist.
+* Bugs haben Vorfahrt. Prozess-Freeze bei Fehlern.
 
 ### Prinzip 25: Automatische Dokumentations-Pflicht
-* Jede strukturelle Änderung muss *sofort* von der KI im Leitfaden dokumentiert werden.
+* Sofortige Nachdokumentation aller strukturellen Änderungen.
 
 ### Prinzip 26: Standort-Bewusstsein (Location Awareness)
-* Skripte müssen ihren eigenen Standort relativ zum Projekt-Root (`.project_id`) selbst finden.
+* Skripte finden ihren Root-Pfad (`.project_id` basiert).
 
 ### Prinzip 27: Projekt-Verriegelung (Identity Lock)
-* Jedes Skript prüft zwingend die `.project_id`, um Ausführung im falschen Projekt zu verhindern.
+* Zwingender Check der `.project_id` vor Ausführung.
 
 ### Prinzip 28: Kontext-Verriegelung (Branch Awareness)
-* Kritische Skripte müssen prüfen, auf welchem #Branch sie laufen (z.B. darf ein Dev-Skript nicht auf `main` laufen).
+* Kritische Skripte prüfen den erlaubten Git-Branch.
+
+### Prinzip 29: Sprach-Stabilität (Locale Stability)
+* Projektsprache ([DE]/[EN]) wird initial fixiert.
+
+### Prinzip 30: Interaktions-Effizienz (Lean Interaction)
+* Skripte sind "Quiet by Default" mit standardisiertem Ergebnis-Block.
+
+### Prinzip 31 (NEU V3.21): KVP & Die "Lean Architect" Checkliste
+* **Problem:** Stillstand ist Rückschritt. Lösungen können unnötig komplex sein.
+* **Lösung (KVP):** Kontinuierliche Verbesserung ist Pflicht für Architekt & KI.
+* **Checkliste:** Die KI muss jede Lösung *intern* prüfen, bevor sie präsentiert wird:
+    1.  **Is it Lean?** (Interaktionen minimiert?)
+    2.  **Is it Clean?** (P23 eingehalten?)
+    3.  **Is it Robust?** (P26-P28 integriert?)
 
 ---
 
-## Phase 1: Die Kern-Architektur (Das "Worker-Pattern")
-### Prinzip 5: Das "Worker-Interface-Pattern" (Dependency Injection)
+## Phase 1: Die Kern-Architektur (Worker-Pattern)
+* **P5:** Worker-Interface-Pattern (DI).
 
 ---
 
-## Phase 2: Das Fundament (Die "Service"-Implementierungen)
-* **P1:** Zentralisierte Konfiguration
-* **P2:** Sicheres Secrets Management
-* **P3:** Physische Umgebungs-Trennung
-* **P4:** Persistentes, Strukturiertes Logging
-* **P12:** Aktive Alarmierung
+## Phase 2: Das Fundament (Services)
+* **P1:** Config. **P2:** Secrets. **P3:** Trennung. **P4:** Logging. **P12:** Alerting.
 
 ---
 
-## Phase 3: Die Architektur (Die "Worker"-Implementierung)
-* **P6:** Idempotentes Design
-* **P7:** "Dry Run" / Test-Modus
+## Phase 3: Die Architektur (Worker-Implementierung)
+* **P6:** Idempotenz. **P7:** Dry Run.
 
 ---
 
-## Phase 4: Die Sicherheitsnetze
-* **P8:** Sichere Stapelverarbeitung
-* **P9:** Interner Sicherheits-Timer
-* **P10:** Transaktionale Fehlerbehandlung
-* **P11:** Manueller Korrektur-Mechanismus
+## Phase 4: Die Sicherheitsnetze (Worker-Schleife)
+* **P8:** Batching. **P9:** Timeout-Schutz. **P10:** Try/Catch Item-Isolation. **P11:** Re-Queue.
 
 ---
 
 ## Phase 5: Die System-Wartung
-* **P13:** Proaktives Health-Monitoring
-* **P14:** Log-Rotation & Archivierung
-* **P15:** Data "Garbage Collection"
+* **P13:** Health-Monitoring. **P14:** Log-Rotation. **P15:** Data GC.
 
 ---
 
 ## Phase 6: Das Enterprise-Ökosystem
-* **P20:** Asynchrone Choreografie (Events)
-* **P21:** Zentrales Framework-Core-Paket (#SoS)
+* **P20:** Asynchrone Choreografie. **P21:** Zentrales Core-Paket.
