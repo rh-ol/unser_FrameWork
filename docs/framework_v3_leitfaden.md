@@ -1,79 +1,72 @@
-# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.32)
+# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.36)
 
 ## Einführung
-Dies ist der technische #Bauplan für das V3.28-Framework. Es definiert alle 31 #Prinzipien und die #Architektur, die durch das zentrale Werkzeug `tools/genesis.sh` initiiert wird. Dieses Dokument ist die einzige Quelle der Wahrheit (SSoT) für das Design des Ökosystems.
+Dies ist der technische #Bauplan für das V3.36-Framework. Es definiert alle 34 #Prinzipien und die #Architektur.
 
 ---
 
-## Phase 0: Der KI-geführte Projekt-Lebenszyklus
+## Phase 0: Der KI-geführte Projekt-Lebenszyklus & Tooling
 
-### Prinzip 0: Der "Universelle Ursprung" (Genesis V3.28+ Workflow)
-* **Problem:** Aller Anfang ist schwer (Henne-Ei-Problem bei neuen Projekten).
-* **Lösung:** Das `tools/genesis.sh` Skript ist der universelle Einstiegspunkt für alles.
-* **Funktionen (V3.28):**
-    * **Intelligente Auswahl:** Findet automatisch die passenden Basis-Pfade für neue Projekte.
-    * **Grüne Wiese (Greenfield):** Startet komplett neue, leere Projekte.
-    * **Bestandsbau (Brownfield Migration):** Importiert existierenden Code automatisch in einen `import/` Ordner zur Weiterverarbeitung.
-    * **Entkopplung:** Löscht die Git-Historie der Basis und initialisiert das neue Projekt sauber.
-    * **Identität:** Setzt automatisch eine eindeutige Projekt-ID (`.project_id`).
+### Prinzip 0: Der "Universelle Ursprung" (Genesis)
+* `tools/genesis.sh` ist der universelle Startpunkt für neue Projekte (Greenfield & Brownfield).
 
-### Prinzip 16: Testdaten & History-Hygiene (QA & Sicherheit)
-* **P16.1 (Qualitätssicherung):** Die KI generiert Skripte zur Erzeugung von Testdaten (`testdata_generator.sh`).
-* **P16.2 (Sicherheit):** Sensible Terminal-Befehle MÜSSEN durch `set +o history` (vorher) und `set -o history` (nachher) gekapselt werden, damit sie nicht in der Befehlshistorie landen.
+### Prinzip 0.1 (NEU V3.36): Der "Kontext-Packer"
+* **Problem:** KI hat keinen direkten Zugriff auf das Dateisystem.
+* **Lösung:** `tools/context_packer.sh [PFAD]` erstellt einen vollständigen Markdown-Snapshot (`PROJECT_CONTEXT.md`) eines beliebigen Verzeichnisses für die KI-Analyse.
+
+### Prinzip 16: Testdaten & History-Hygiene (QA & Security)
+* **P16.1:** KI generiert Testdaten.
+* **P16.2:** Sensible Befehle müssen mit `set +o history` gekapselt werden.
 
 ### Prinzip 17: CI/CD Pipeline-Generierung
-* Automatisierung von Tests und Bereitstellungen (z.B. via `ci_cd_pipeline.yml`).
+* Automatisierte Tests und Deployments.
 
-### Prinzip 18: "IntelliSense"-Architektur (Selbstdokumentation)
-* Der Code muss durch strenge Typisierung und Kommentare (z.B. JSDoc) seine eigene Dokumentation sein, damit die Entwicklungsumgebung (IDE) helfen kann.
+### Prinzip 18: "IntelliSense"-Architektur
+* Selbst-dokumentierender Code.
 
 ### Prinzip 19: Anforderungs-Management (#Wiederverwendbarkeit)
-* Jede Entwicklung beginnt mit einer klar definierten Anforderung (`REQ-001`). Anforderungen werden in wiederverwendbaren Gruppen (Sets) gebündelt.
+* Strukturierte Anforderungen. Tools müssen wiederverwendbar sein (Parameter statt Hardcoding).
 
 ### Prinzip 22: Der #Generelle_Software_Entwicklungs-Prozess (Git-Flow)
-* Wir nutzen einen von der KI geführten **GitHub-Flow**:
-    1.  **#Verzweigen (Branch):** Immer auf isolierten Arbeitskopien (Branches) arbeiten, niemals direkt auf der Hauptlinie.
-    2.  **#Verifizieren (Verify):** Lokal testen (P0 Abnahmetest), bevor Änderungen geteilt werden.
-    3.  **#Überprüfen (Review):** Änderungen via Pull Request (PR) durch den Architekten prüfen lassen (Diff-Sicht).
-    4.  **#Zusammenführen & Markieren (Merge & Tag):** Nur stabile Stände gelangen in die Hauptlinie (`main`) und werden mit einer Versionsnummer versehen.
+* Branch -> Verify -> Review -> Merge & Tag.
 
 ### Prinzip 23: #SaubererCode & #KISS
-* **Einfachheit (KISS):** Die einfachste, robuste Lösung ist immer die beste.
-* **Wiederholungen vermeiden (DRY):** Gemeinsamer Code gehört in das Kern-Paket (P21).
-* **Archivierung statt Löschen:** Veraltete Skripte werden nicht gelöscht, sondern in einen dokumentierten `archive/` Ordner verschoben, um die Nachvollziehbarkeit (P4) zu sichern.
+* Einfachheit, DRY, Archivierung.
 
 ### Prinzip 24: Zwingende Fehler-Integrität
-* Erkannte #Fehler (Bugs) haben sofortige Priorität vor neuer #Feature-Planung. Der Prozess wird "eingefroren", bis der Fehler behoben ist.
+* Bugs stoppen Features.
 
 ### Prinzip 25: Automatische Dokumentations-Pflicht
-* Jede strukturelle Änderung am Framework muss *sofort und automatisch* von der KI in diesem Leitfaden nachgezogen werden.
+* Jede Änderung muss sofort dokumentiert werden.
 
 ### Prinzip 26: Standort-Bewusstsein
-* Skripte müssen selbstständig erkennen, wo sie liegen (relativ zum Projekt-Root), um Ausführungsfehler zu vermeiden.
+* Skripte finden ihren Root-Pfad selbst.
 
-### Prinzip 27: Projekt-Verriegelung (Identitäts-Check)
-* Jedes Skript muss zwingend die `.project_id` prüfen, um eine Ausführung im falschen Projektordner zu verhindern.
+### Prinzip 27: Projekt-Verriegelung
+* `.project_id` Check ist zwingend.
 
-### Prinzip 28: Kontext-Verriegelung (Branch-Check)
-* Kritische Skripte müssen prüfen, auf welcher Arbeitskopie (Branch) sie laufen (z.B. darf ein Entwickler-Skript nicht auf der Hauptlinie `main` laufen).
+### Prinzip 28: Kontext-Verriegelung
+* Kritische Skripte prüfen den Git-Branch.
 
 ### Prinzip 29: Sprach-Stabilität
-* Die Projektsprache ([DE]/[EN]) wird initial festgelegt und muss danach konsequent beibehalten werden.
+* Projektsprache ist fixiert ([DE]).
 
-### Prinzip 30: Interaktions-Effizienz (Schlanke Interaktion)
-* Skripte sind standardmäßig "still" (wenig Output) und enden mit einem standardisierten Ergebnis-Block für die KI.
+### Prinzip 30: Interaktions-Effizienz
+* "Quiet by Default" Skripte.
 
 ### Prinzip 31: KVP & Die "Lean Architect" Checkliste
-### Prinzip 32 (NEU V3.30): Der KI-Gedächtnis-Kristall
-### Prinzip 33 (NEU V3.33): Die Reflexions-Chronik
-* **Ziel:** Langfristiges Lernen aus Fehlern sichern.
-* **Lösung:** `REFLECTION_LOG.md` dokumentiert die "Warum"-Entscheidungen hinter den Prinzipien.
+* Ständige Hinterfragung durch die KI (Lean? Clean? Robust? Documented?).
 
-* **Problem:** KI verliert Kontext zwischen Sessions (Amnesie).
-* **Lösung:** `AI_MEMORY.md` speichert Status, Regeln & Backlog in der SSoT. Muss bei jedem Start geladen werden.
-* Ständige Hinterfragung durch die KI vor jeder Ausgabe: Ist es schlank? Ist es sauber? Ist es robust? Ist es dokumentiert?
+### Prinzip 32: Der KI-Gedächtnis-Kristall
+* `AI_MEMORY.md` sichert den Kontext zwischen Sessions.
+
+### Prinzip 33: Die Reflexions-Chronik
+* `REFLECTION_LOG.md` speichert historische Entscheidungen.
+
+### Prinzip 34 (NEU V3.36): Zwingende Planungs-Freigabe
+* **Regel:** Bevor Code generiert wird, muss der Architekt den Masterplan freigeben (Checkliste).
 
 ---
 
-## Phase 1-6: Kern-Architektur & Ökosystem
-*(Siehe detaillierte Prinzipien P1-P15, P20-P21 in früheren Versionen oder direkt im Code)*
+## Phase 1-6: Kern-Architektur
+*(Detaillierte Prinzipien P1-P15, P20-P21 siehe Code/Historie)*
