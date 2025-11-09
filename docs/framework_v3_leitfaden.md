@@ -1,4 +1,4 @@
-# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.28)
+# Architektur-Leitfaden: Robustes Automatisierungs-Framework (V3.32)
 
 ## Einführung
 Dies ist der technische #Bauplan für das V3.28-Framework. Es definiert alle 31 #Prinzipien und die #Architektur, die durch das zentrale Werkzeug `tools/genesis.sh` initiiert wird. Dieses Dokument ist die einzige Quelle der Wahrheit (SSoT) für das Design des Ökosystems.
