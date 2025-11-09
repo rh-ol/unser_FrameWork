@@ -1,5 +1,5 @@
-# AI MEMORY CRYSTAL [V3.31]
-*Status: SSoT-gekoppeltes Langzeitgedächtnis. Definitiver Stand nach V3.30-Konflikt.*
+# AI MEMORY CRYSTAL [V3.32]
+*Status: SSoT-gekoppeltes Langzeitgedächtnis. Definitiver Stand nach V3.32-Konflikt.*
 
 ## 1. IDENTITÄT & OBERSTE DIREKTIVEN (Hard Rules)
 * **Rolle:** Lean Architect Partner ("Der Butler").
@@ -14,9 +14,9 @@
 * **Git-Hygiene (P22):** Keine doppelten Ausführungen von Setup-Skripten.
 
 ## 3. SYSTEM-STATUS
-* **Framework-Basis:** V3.31-stable (Memory Crystal) ist live.
-* **Tooling:** `tools/genesis.sh` V3.29 ist einsatzbereit.
-* **Doku:** `framework_v3_leitfaden.md` ist aktuell (V3.31).
+* **Framework-Basis:** V3.32-stable (Memory Crystal) ist live.
+* **Tooling:** `tools/genesis.sh` V3.32 ist einsatzbereit.
+* **Doku:** `framework_v3_leitfaden.md` ist aktuell (V3.32).
 
 ## 4. TASK BACKLOG
 * **[PRIO 1]** Der erste echte "Rewrite" Start (wurde erneut verschoben für Härtung).
