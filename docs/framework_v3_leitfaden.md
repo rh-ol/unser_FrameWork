@@ -65,6 +65,10 @@ Dies ist der technische #Bauplan für das V3.28-Framework. Es definiert alle 31 
 
 ### Prinzip 31: KVP & Die "Lean Architect" Checkliste
 ### Prinzip 32 (NEU V3.30): Der KI-Gedächtnis-Kristall
+### Prinzip 33 (NEU V3.33): Die Reflexions-Chronik
+* **Ziel:** Langfristiges Lernen aus Fehlern sichern.
+* **Lösung:** `REFLECTION_LOG.md` dokumentiert die "Warum"-Entscheidungen hinter den Prinzipien.
+
 * **Problem:** KI verliert Kontext zwischen Sessions (Amnesie).
 * **Lösung:** `AI_MEMORY.md` speichert Status, Regeln & Backlog in der SSoT. Muss bei jedem Start geladen werden.
 * Ständige Hinterfragung durch die KI vor jeder Ausgabe: Ist es schlank? Ist es sauber? Ist es robust? Ist es dokumentiert?
